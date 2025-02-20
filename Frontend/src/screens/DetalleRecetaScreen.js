@@ -8,7 +8,7 @@ const DetalleRecetaScreen = ({ route }) => {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>{receta.nombre}</Text>
       {receta.imagen && (
-        <Image source={{ uri: `http://192.168.6.41:5000${receta.imagen}` }} style={styles.image} />
+        <Image source={{ uri: `http://192.168.1.239:5000${receta.imagen}` }} style={styles.image} />
       )}
       <Text style={styles.subtitle}>Descripción</Text>
       <Text style={styles.text}>{receta.descripcion}</Text>
@@ -31,13 +31,16 @@ const DetalleRecetaScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 20,
+    padding: 50,
     backgroundColor: '#fff',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    paddingBottom: 20,
   },
   image: {
     width: '100%',
@@ -54,6 +57,9 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    paddingBottom: 20,
   },
 });
 

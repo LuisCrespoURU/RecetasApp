@@ -46,7 +46,7 @@ export default function AgregarRecetaScreen({ navigation }) {
         });
       }
 
-      const response = await axios.post('http://192.168.234.191:5000/api/recipes', formData, {
+      const response = await axios.post('http://192.168.1.239:5000/api/recipes', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',

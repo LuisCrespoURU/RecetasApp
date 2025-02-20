@@ -13,7 +13,7 @@ const RecetasScreen = ({ navigation }) => {
     try {
       const token = await AsyncStorage.getItem('token');
       if (token) {
-        const response = await axios.get('http://192.168.234.191:5000/api/recipes', {
+        const response = await axios.get('http://192.168.1.239:5000/api/recipes', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
