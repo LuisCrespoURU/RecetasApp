@@ -46,7 +46,7 @@ export default function AgregarRecetaScreen({ navigation }) {
         });
       }
 
-      const response = await axios.post('http://192.168.6.41:5000/api/recipes', formData, {
+      const response = await axios.post('http://192.168.234.191:5000/api/recipes', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
@@ -67,10 +67,9 @@ export default function AgregarRecetaScreen({ navigation }) {
     }
   };
 
-  // Solicitar permiso de almacenamiento en Android FALLA
   const requestStoragePermission = async () => {
     try {
-      Alert.alert('Error', 'juanito');
+      console.log('Solicitando permiso de almacenamiento...');
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
         {
@@ -81,10 +80,9 @@ export default function AgregarRecetaScreen({ navigation }) {
           buttonPositive: 'Aceptar',
         },
       );
-      Alert.alert('Error', 'juanito2');
+      console.log('Permiso concedido:', granted === PermissionsAndroid.RESULTS.GRANTED);
       return granted === PermissionsAndroid.RESULTS.GRANTED;
     } catch (err) {
-      Alert.alert('Error', err);
       console.warn(err);
       return false;
     }
@@ -92,10 +90,9 @@ export default function AgregarRecetaScreen({ navigation }) {
 
   const handleSeleccionarImagen = async () => {
     if (Platform.OS === 'android') {
-      Alert.alert('Error', 'PERMISOS');
       const hasPermission = await requestStoragePermission();
       if (!hasPermission) {
-        Alert.alert('Error', 'NEGADO');
+        Alert.alert('Permiso denegado', 'No se concedió el permiso de almacenamiento');
         return;
       }
     }
@@ -154,6 +151,7 @@ export default function AgregarRecetaScreen({ navigation }) {
         placeholder="Nombre de la receta"
         value={nombre}
         onChangeText={setNombre}
+        maxLength={50}
       />
 
       <TextInput
@@ -176,6 +174,8 @@ export default function AgregarRecetaScreen({ navigation }) {
         placeholder="Tiempo de elaboración"
         value={tiempo}
         onChangeText={setTiempo}
+        maxLength={10}
+        keyboardType="numeric"
       />
 
       <Text style={styles.subtitle}>Ingredientes</Text>

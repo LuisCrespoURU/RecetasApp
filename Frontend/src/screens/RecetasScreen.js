@@ -11,7 +11,7 @@ const RecetasScreen = ({ navigation }) => {
     try {
       const token = await AsyncStorage.getItem('token');
       if (token) {
-        const response = await axios.get('http://192.168.6.41:5000/api/recipes', {
+        const response = await axios.get('http://192.168.234.191:5000/api/recipes', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -36,8 +36,12 @@ const RecetasScreen = ({ navigation }) => {
       )}
       <Text style={styles.recipeTitle}>{item.nombre}</Text>
       <Text>{item.descripcion}</Text>
-      <Text>Tiempo: {item.tiempo}</Text>
-      <Text>Comensales: {item.comensales}</Text>
+      
+      <View style={styles.buttonContainer}>
+      <TouchableOpacity style={styles.editButton} onPress={() => navigation.navigate('EditarReceta', { recetaId: item._id })}>
+        <Text style={styles.buttonText}>Editar</Text>
+      </TouchableOpacity>
+    </View>
     </TouchableOpacity>
   );
 
@@ -66,6 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    
   },
   recipeCard: {
     padding: 10,
@@ -74,6 +79,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 8,
     backgroundColor: '#f9f9f9',
+    
   },
   recipeImage: {
     width: '100%',
@@ -84,6 +90,7 @@ const styles = StyleSheet.create({
   recipeTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    maxHeight: 25,
   },
   fab: {
     position: 'absolute',
@@ -100,6 +107,20 @@ const styles = StyleSheet.create({
   fabText: {
     fontSize: 24,
     color: '#fff',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  editButton: {
+    backgroundColor: '#FFD859',
+    padding: 10,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 14,
   },
 });
 

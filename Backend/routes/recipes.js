@@ -95,6 +95,20 @@ router.put('/:id', upload.single('imagen'), async (req, res) => {
   }
 });
 
+// Obtener una receta específica (protegido)
+router.get('/:id', authMiddleware, async (req, res) => {
+  try {
+    console.log(`Fetching receta with ID: ${req.params.id}`);
+    const receta = await Recipe.findById(req.params.id);
+    if (!receta) {
+      return res.status(404).json({ error: 'Receta no encontrada' });
+    }
+    res.json(receta);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Obtener todas las recetas (protegido)
 router.get('/', authMiddleware, async (req, res) => {
   try {
