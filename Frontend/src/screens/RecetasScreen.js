@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, Pressable, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
+import { View, Text, Pressable, StyleSheet, FlatList, TouchableOpacity, Image, TextInput } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 
 const RecetasScreen = ({ navigation }) => {
   const [recetas, setRecetas] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [filteredRecetas, setFilteredRecetas] = useState([]);
 
   const fetchRecetas = async () => {
     try {
@@ -17,6 +19,7 @@ const RecetasScreen = ({ navigation }) => {
           },
         });
         setRecetas(response.data);
+        setFilteredRecetas(response.data);
       }
     } catch (error) {
       console.error("Error fetching recetas", error);
@@ -28,6 +31,18 @@ const RecetasScreen = ({ navigation }) => {
       fetchRecetas();
     }, [])
   );
+
+  useEffect(() => {
+    if (searchText === '') {
+      setFilteredRecetas(recetas);
+    } else {
+      setFilteredRecetas(
+        recetas.filter(receta =>
+          receta.nombre.toLowerCase().includes(searchText.toLowerCase())
+        )
+      );
+    }
+  }, [searchText, recetas]);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.recipeCard} onPress={() => navigation.navigate('DetalleReceta', { receta: item })}>
@@ -48,8 +63,14 @@ const RecetasScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Mis Recetas</Text>
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Buscar receta..."
+        value={searchText}
+        onChangeText={setSearchText}
+      />
       <FlatList
-        data={recetas}
+        data={filteredRecetas}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
       />
@@ -70,7 +91,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    
+  },
+  searchInput: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 20,
   },
   recipeCard: {
     padding: 10,
@@ -79,7 +107,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 8,
     backgroundColor: '#f9f9f9',
-    
   },
   recipeImage: {
     width: '100%',
